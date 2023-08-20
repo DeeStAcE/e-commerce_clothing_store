@@ -21,7 +21,7 @@ class LoginForm(forms.Form):
 class RegisterForm(forms.ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput, label="Password")
     password2 = forms.CharField(widget=forms.PasswordInput, label="Type password again")
-    email = forms.CharField(widget=forms.EmailField, label="Email")
+    email = forms.EmailField(label="Email")
     username = forms.CharField(initial="")
 
     # check if both password are the same
