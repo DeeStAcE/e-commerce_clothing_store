@@ -5,8 +5,8 @@ from django.db import models
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=128)
-    email = models.EmailField(max_length=128)
+    name = models.CharField(max_length=128, null=True)
+    email = models.EmailField(max_length=128, null=True)
 
     def __str__(self):
         return self.name
@@ -38,6 +38,7 @@ class Product(models.Model):
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField()
+    order = models.PositiveIntegerField(null=True, blank=True)
 
 
 class Order(models.Model):
@@ -49,12 +50,29 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.id} - {self.customer}"
 
+    @property
+    def get_cart_total(self):
+        order_items = self.orderitem_set.all()
+        total = sum([item.get_total for item in order_items])
+        return total
+
+    @property
+    def get_cart_items(self):
+        order_items = self.orderitem_set.all()
+        total = sum([item.quantity for item in order_items])
+        return total
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=0)
     data_added = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def get_total(self):
+        total = self.product.price * self.quantity
+        return total
 
 
 class ShippingAddress(models.Model):

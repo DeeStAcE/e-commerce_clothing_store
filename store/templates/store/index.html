@@ -1,15 +1,12 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-
-<h1>START</h1>
-
-</body>
-</html>
+{% extends 'store/base.html' %} {% block content %}
+    <div>
+        <h1>START</h1>
+    </div>
+    <div>
+        {% for product in products %}
+            <a href="{% url 'product_view' product.slug %}">{{ product.name }}</a>
+            {{ product.price|floatformat:2 }}
+            <button data-product="{{ product.id }}" data-action="add" class="update-cart">Add to cart</button>
+        {% endfor %}
+    </div>
+{% endblock %}
