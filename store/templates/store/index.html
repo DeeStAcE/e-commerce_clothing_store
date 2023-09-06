@@ -1,0 +1,12 @@
+{% extends 'store/base.html' %} {% block content %}
+    <div>
+        <h1>START</h1>
+    </div>
+    <div>
+        {% for product in products %}
+            <a href="{% url 'product_view' product.slug %}">{{ product.name }}</a>
+            {{ product.price|floatformat:2 }}
+            <button data-product="{{ product.id }}" data-action="add" class="update-cart">Add to cart</button>
+        {% endfor %}
+    </div>
+{% endblock %}

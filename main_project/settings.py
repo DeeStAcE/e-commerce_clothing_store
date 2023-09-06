@@ -137,3 +137,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_ID")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PW")
+
+# Image settings
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
