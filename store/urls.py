@@ -7,4 +7,4 @@ from store.views import *
 urlpatterns = [
     path("", IndexView.as_view(), name='index'),
     path("add-product/", AddProductView.as_view(), name='add_product'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

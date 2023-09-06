@@ -16,23 +16,28 @@ class IndexView(View):
         pass
 
 
+# Form for adding a new product with multiple images at once (doesn't work for now)
 class AddProductView(PermissionRequiredMixin, View):
     permission_required = "product.add_product"
 
     def get(self, request):
         form = ProductForm()
-        image_form = ProductImageForm()
+        image_form = FileFieldForm()
         return render(request, "store/product_form.html", {"form": form, "image_form": image_form})
 
     def post(self, request):
         form = ProductForm(request.POST)
-        files = request.FILES.getlist("image")
-        if form.is_valid():
-            form.save()
+        image_form = FileFieldForm(request.POST)
+
+        if form.is_valid() and image_form.is_valid():
+            new_product = form.save()
+            files = image_form.cleaned_data["file_field"]
+            print(files)
+
             for file in files:
-                ProductImage.objects.create(product=form, image=file)
+                ProductImage.objects.create(product=new_product, image=file)
             messages.success(request, "New product added successfully")
         else:
             messages.error(request, "Error during adding a new product. Try again")
-            return render(request, "store/product_form.html", {"form": form})
+            return render(request, "store/product_form.html", {"form": form, "image_form": image_form})
         return redirect("index")
